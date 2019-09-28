@@ -8,7 +8,7 @@
   [_ binding acc]
   (update-in acc [:letks] into [binding `(:jdbc ~'+compojure-api-request+)]))
 
-(defn wrap-jdbc-connection [handler db-spec]
+(defn wrap-jdbc-connection [handler datasource]
   (fn [req]
-    (jdbc/with-db-transaction [conn db-spec]
+    (jdbc/with-db-transaction [conn {:datasource @datasource}]
       (handler (assoc req :jdbc conn)))))
